@@ -1,0 +1,128 @@
+version: '3.3'
+services:
+ web_service:
+  build:
+    context: ./apacheServer
+    dockerfile: Dockerfile
+  container_name: server
+  depends_on:
+    - db
+  ports:
+   - "4000:80"
+  volumes:
+   - ./apacheServer:/var/www/html/
+  environment:
+   - ENV=development
+   - PORT=4000
+
+ db:
+  container_name: MysqlDb
+  image: mysql:8.0
+  command: --default-authentication-plugin=mysql_native_password
+  restart: always
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: test_db
+    MYSQL_USER: st
+    MYSQL_PASSWORD: st 
+  ports:
+    - "4001:3306"
+
+
+ # app_logic_service:
+ #  build: app_logic_service/
+ #  ports:
+ #   - "4010:4010"
+ #  volumes:
+ #   - ./app_logic_service:/app
+ #  environment:
+ #   - ENV=development
+ #   - PORT=4010
+ #   - PYTHONUNBUFFERED=1
+ #   - DB=mongodb://mongodb_app_logic:27017/user_catalog
+ #   - ZK=localhost:2181
+ #   - AUTH_PORT= 4020
+ #   - SS1_URI=http://storage_service1:4030
+ #   - SS2_URI=http://storage_service2:4031
+
+ # auth_service:
+ #  build: auth_service/
+ #  ports:
+ #   - "4020:4020"
+ #  volumes:
+ #   - ./auth_service:/app
+ #  environment:
+ #   - ENV=development
+ #   - PORT=4020
+ #   - DB=mongodb://mongodb_auth:27018/registered_users
+ #   - SECRET='TOP SECRET'
+ #   - ZK=localhost:2181
+
+ # storage_service1:
+ #  build: storage_service/
+ #  ports:
+ #   - "4030:4030"
+ #  volumes:
+ #   - ./storage_service:/app
+ #  environment:
+ #   - ENV=development
+ #   - PORT=4030
+ #   - ZK=localhost:2181
+ #   - URI=http://storage_service1:4030
+
+ # storage_service2:
+ #  build: storage_service/
+ #  ports:
+ #   - "4031:4031"
+ #  volumes:
+ #   - ./storage_service:/app
+ #  environment:
+ #   - ENV=development
+ #   - PORT=4031
+ #   - ZK=localhost:2181
+ #   - URI=http://storage_service2:4031
+
+ # storage_service3:
+ #  build: storage_service/
+ #  ports:
+ #   - "4032:4032"
+ #  volumes:
+ #   - ./storage_service:/app
+ #  environment:
+ #   - ENV=development
+ #   - PORT=4032
+ #   - ZK=localhost:2181
+ #   - URI=http://storage_service3:4032
+
+ # mongodb_app_logic:
+ #  image: mongo:latest
+ #  container_name: "mongodb_app_logic"
+ #  environment:
+ #   - MONGO_DATA_DIR=/usr/data/db
+ #   - MONGO_LOG_DIR=/dev/null
+ #  volumes:
+ #   - ./data/app_db:/usr/data/db
+ #  command: mongod --smallfiles --port 27017 --logpath=/dev/null # --quiet
+
+ # mongodb_auth:
+ #  image: mongo:latest
+ #  container_name: "mongodb_auth"
+ #  environment:
+ #   - MONGO_DATA_DIR=/usr/data/db
+ #   - MONGO_LOG_DIR=/dev/null
+ #  volumes:
+ #   - ./data/auth_db:/usr/data/db
+ #  command: mongod --smallfiles --port 27018 --logpath=/dev/null # --quiet
+
+ # zk:
+ #  build: zk_service
+ #  image: zookeeper:latest
+ #  restart: always
+ #  hostname: zk
+ #  ports:
+ #    - 2181:2181
+
+
+# networks:
+#  # default:
+#  #  name: web_dev
