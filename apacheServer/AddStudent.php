@@ -309,7 +309,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <input  type="number" class="form-control" name = "MobileNumber" placeholder="Mobile number" required="required">
         </div>
         <div class="form-group">
-            <input placeholder="Date" name="Date" class="textbox-n form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" required="required">
+            <input placeholder="Birthday" name="Date" class="textbox-n form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" required="required">
         </div>
         <div class="form-group">
             <button id="reg_button" type="submit" class="btn btn-primary btn-block">Add </button>
@@ -318,6 +318,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     </form>
 </div>
+
+
+
 
     
 

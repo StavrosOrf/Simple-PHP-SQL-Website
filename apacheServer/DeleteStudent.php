@@ -28,15 +28,43 @@ if(!$result->num_rows>0){
 
 $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 $myname = $row['NAME'] ." " . $row['SURNAME'];
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+  
+      if ($conn->query($sql) === TRUE) {
+          //echo "Table MyGuests created successfully";
+      } else {
+         // echo "Error creating table: " . $conn->error;
+      }
+
+      $id = mysqli_real_escape_string($conn,$_POST['id']);
+      $sql = "DELETE FROM `Students` 
+      WHERE `ID` = '$id'";
+
+      if ($conn->query($sql) === TRUE) {
+          //echo "New record UPDATED successfully";
+      } else {
+          echo "Error: " . $sql . "<br>" . $conn->error;
+      }
+
+      $msg = "Student added successfully!!!";
+  }
+
+
+
 ?>
 
 <html>
 <head>
-	<title>Home Page</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit Student Page</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	 <style type = "text/css">
 	 	body {
 	 	  background-image: url("https://wallup.net/wp-content/uploads/2016/07/20/34502-simple_background.jpg");
-	 	  background-repeat: no-repeat;
+	 	  /*background-repeat: no-repeat;*/
 	 	  background-size: 100%;
 		  margin: 0;
 		  padding: 0;
@@ -192,6 +220,61 @@ $myname = $row['NAME'] ." " . $row['SURNAME'];
 		  margin-right: 40%;
 		  margin-left: 10%;
 		}
+		.tuples{
+			/*margin-top: 10%;*/
+			margin-right: 50%;
+			display: block;
+		}
+
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 80%;
+		  margin: auto;
+		}
+
+		td {
+		  border: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+		tr:nth-child(odd) {
+		  background-color: white;
+		}			
+		table#t01, th {
+		  background-color: black;
+		  color: white;
+		  order: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		.login-form {
+			width: 340px;
+    		margin: 10% auto;
+
+		}
+	    .login-form form {
+	    	margin-bottom: 15px;
+	        background: #f7f7f7;
+	        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+	        padding: 30px;
+	    }
+	    .login-form h2 {
+	        margin: 0 0 15px;
+	    }
+	    .form-control, .btn {
+	        min-height: 38px;
+	        border-radius: 2px;
+	    }
+	    .btn {        
+	        font-size: 15px;
+	        font-weight: bold;
+	    }
 
 	 </style>
 </head>
@@ -220,6 +303,7 @@ $myname = $row['NAME'] ." " . $row['SURNAME'];
         <li><a href="http://localhost:4000/index.php">Log out</a></li>
       </ul>
     </div>
+    </div>
 
 
     
@@ -227,3 +311,41 @@ $myname = $row['NAME'] ." " . $row['SURNAME'];
 </body>
 
 </html>
+<?php 
+	$sql = "SELECT * FROM Students " ;
+$result = mysqli_query($conn,$sql);
+
+echo "<div id=\"tab\"></div>
+	<table id=\"table\">
+	  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Surname</th>
+    <th>Fathername</th>
+    <th>Grade</th>
+    <th>Mobile Number</th>
+    <th>Birthday</th>
+    <th></th>
+  	</tr>";
+if($result->num_rows>0){
+	while($row = $result->fetch_assoc()) {
+       	echo "  <tr>
+				    <td>". $row["ID"] ."</td>
+				    <td>".$row["NAME"]."</td>
+				    <td>". $row["SURNAME"] ."</td>
+				    <td>".$row["FATHERNAME"]."</td>
+				    <td>". $row["GRADE"] ."</td>
+				    <td>".$row["MOBILENUMBER"]."</td>
+				    <td>".$row["BIRTHDAY"]."</td>
+				    <td>  <form action = \"\" method = \"post\">
+				    	  <input name=\"id\" type=\"hidden\" class=\"form-control\" value=\"" .$row["ID"]. "\" required=\"required\"> 
+            			  <button name=\"".$row["ID"]."\" type=\"submit\" class=\"btn btn-primary btn-block\">Delete </button>
+   						 </form></td>
+				  </tr>";
+    }
+}
+echo "</table>";
+
+ ?>
+
+

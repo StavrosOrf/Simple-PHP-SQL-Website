@@ -28,15 +28,63 @@ if(!$result->num_rows>0){
 
 $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 $myname = $row['NAME'] ." " . $row['SURNAME'];
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+  
+
+    //checking if Student table is created(just for the first time)
+      $sql = "CREATE TABLE Students (
+        ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        NAME VARCHAR(30) NOT NULL,
+        SURNAME VARCHAR(30) NOT NULL,
+        FATHERNAME VARCHAR(30) NOT NULL,
+        GRADE FLOAT(4) NOT NULL,
+        MOBILENUMBER VARCHAR(30) NOT NULL,
+        BIRTHDAY DATE NOT NULL
+        )";
+
+      if ($conn->query($sql) === TRUE) {
+          //echo "Table MyGuests created successfully";
+      } else {
+         // echo "Error creating table: " . $conn->error;
+      }
+
+      $fathername = mysqli_real_escape_string($conn,$_POST['Fathername']);
+      $grade = mysqli_real_escape_string($conn,$_POST['Grade']);
+      $name = mysqli_real_escape_string($conn,$_POST['Name']);
+      $surname = mysqli_real_escape_string($conn,$_POST['Surname']);
+      $mobileNumber = mysqli_real_escape_string($conn,$_POST['MobileNumber']);
+      $date = mysqli_real_escape_string($conn,$_POST['Date']);
+      $id = mysqli_real_escape_string($conn,$_POST['id']);
+
+      $sql = "UPDATE `Students` SET `NAME`='$name', `SURNAME`= '$surname', `FATHERNAME`='$fathername',`GRADE` = '$grade'
+      ,`MOBILENUMBER`= '$mobileNumber',`BIRTHDAY` = '$date'
+      WHERE `ID` = '$id'";
+
+      if ($conn->query($sql) === TRUE) {
+          //echo "New record UPDATED successfully";
+      } else {
+          echo "Error: " . $sql . "<br>" . $conn->error;
+      }
+
+      $msg = "Student added successfully!!!";
+  }
+
+
+
 ?>
 
 <html>
 <head>
-	<title>Home Page</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit Student Page</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	 <style type = "text/css">
 	 	body {
 	 	  background-image: url("https://wallup.net/wp-content/uploads/2016/07/20/34502-simple_background.jpg");
-	 	  background-repeat: no-repeat;
+	 	  /*background-repeat: no-repeat;*/
 	 	  background-size: 100%;
 		  margin: 0;
 		  padding: 0;
@@ -192,6 +240,61 @@ $myname = $row['NAME'] ." " . $row['SURNAME'];
 		  margin-right: 40%;
 		  margin-left: 10%;
 		}
+		.tuples{
+			/*margin-top: 10%;*/
+			margin-right: 50%;
+			display: block;
+		}
+
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 80%;
+		  margin: auto;
+		}
+
+		td {
+		  border: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+		tr:nth-child(odd) {
+		  background-color: white;
+		}			
+		table#t01, th {
+		  background-color: black;
+		  color: white;
+		  order: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		.login-form {
+			width: 340px;
+    		margin: 10% auto;
+
+		}
+	    .login-form form {
+	    	margin-bottom: 15px;
+	        background: #f7f7f7;
+	        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+	        padding: 30px;
+	    }
+	    .login-form h2 {
+	        margin: 0 0 15px;
+	    }
+	    .form-control, .btn {
+	        min-height: 38px;
+	        border-radius: 2px;
+	    }
+	    .btn {        
+	        font-size: 15px;
+	        font-weight: bold;
+	    }
 
 	 </style>
 </head>
@@ -220,6 +323,7 @@ $myname = $row['NAME'] ." " . $row['SURNAME'];
         <li><a href="http://localhost:4000/index.php">Log out</a></li>
       </ul>
     </div>
+    </div>
 
 
     
@@ -227,3 +331,59 @@ $myname = $row['NAME'] ." " . $row['SURNAME'];
 </body>
 
 </html>
+<?php 
+	$sql = "SELECT * FROM Students " ;
+$result = mysqli_query($conn,$sql);
+
+echo "<div id=\"tab\"></div>
+	<table id=\"table\">
+	  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Surname</th>
+    <th>Fathername</th>
+    <th>Grade</th>
+    <th>Mobile Number</th>
+    <th>Birthday</th>
+    <th></th>
+  	</tr>";
+if($result->num_rows>0){
+	while($row = $result->fetch_assoc()) {
+        //echo "id: " . $row["ID"]. " - Name: " . $row["NAME"]. " " . $row["SURNAME"]. "<br>";
+       	//echo "<div class=\"tuples\"><h1>" .$row["NAME"]."</h1></div>";
+       	echo "  <tr>
+				    <td>". $row["ID"] ."</td>
+				    <td>".$row["NAME"]."</td>
+				    <td>". $row["SURNAME"] ."</td>
+				    <td>".$row["FATHERNAME"]."</td>
+				    <td>". $row["GRADE"] ."</td>
+				    <td>".$row["MOBILENUMBER"]."</td>
+				    <td>".$row["BIRTHDAY"]."</td>
+				    <td><button name=\"". $row["ID"] ."\" type=\"button\" class=\"btn btn-primary btn-block\" onclick=\"editFunction(this)\">EDIT</button></td>
+				  </tr>";
+    }
+}
+echo "</table>";
+
+ ?>
+
+ <script>
+function editFunction(event) {
+
+
+var id = event.parentElement.parentElement.children[0].innerHTML;
+var name = event.parentElement.parentElement.children[1].innerHTML;
+var surname = event.parentElement.parentElement.children[2].innerHTML;
+var fathername = event.parentElement.parentElement.children[3].innerHTML;
+var grade = event.parentElement.parentElement.children[4].innerHTML;
+var mobilenumber = event.parentElement.parentElement.children[5].innerHTML;
+console.log(event.parentElement.parentElement);
+console.log(mobilenumber);
+var birthday = event.parentElement.parentElement.children[6].innerHTML;
+  document.getElementById("tab").innerHTML =
+  " <div class=\"login-form\">     <form action = \"\" method = \"post\">        <h2 class=\"text-center\">Edit Student</h2><div class=\"form-group\">            <input name=\"id\" type=\"hidden\" class=\"form-control\" value=\"" +id+ "\" required=\"required\">        </div>               <div class=\"form-group\">            <input name=\"Name\" type=\"text\" class=\"form-control\" value=\"" +name+ "\" required=\"required\">        </div>         <div class=\"form-group\">            <input  type=\"text\" class=\"form-control\" name = \"Surname\" value=\"" +surname+ "\" required=\"required\">        </div>		<div class=\"form-group\">            <input  type=\"text\" class=\"form-control\" name = \"Fathername\" value=\"" +fathername+ "\" required=\"required\">        </div>        <div class=\"form-group\">            <input name=\"Grade\" type=\"number\" class=\"form-control\" value=\"" +grade+ "\" required=\"required\">        </div>  <div class=\"form-group\">            <input  type=\"number\" class=\"form-control\" name = \"MobileNumber\" value=\"" +mobilenumber+ "\" required=\"required\">        </div>        <div class=\"form-group\">            <input value=\"" +birthday+ "\" name=\"Date\" class=\"textbox-n form-control\" type=\"text\" onfocus=\"(this.type='date')\" onblur=\"(this.type='text')\" id=\"date\" required=\"required\">       <div class=\"form-group\">            <button id=\"reg_button\" type=\"submit\" class=\"btn btn-primary btn-block\">Edit </button>        </div>        <div style = \"font-size:20px; color:green; margin-top:10px;text-align: center;\"></div>    </form></div>";
+ // document.getElementById("table").remove();
+}
+
+
+</script>
