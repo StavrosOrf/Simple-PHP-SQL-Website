@@ -28,15 +28,24 @@ if(!$result->num_rows>0){
 
 $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 $myname = $row['NAME'] ." " . $row['SURNAME'];
+
+
+
+
+
 ?>
 
 <html>
 <head>
-	<title>Home Page</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search Student Page</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	 <style type = "text/css">
 	 	body {
 	 	  background-image: url("https://wallup.net/wp-content/uploads/2016/07/20/34502-simple_background.jpg");
-	 	  background-repeat: no-repeat;
+	 	  /*background-repeat: no-repeat;*/
 	 	  background-size: 100%;
 		  margin: 0;
 		  padding: 0;
@@ -192,6 +201,60 @@ $myname = $row['NAME'] ." " . $row['SURNAME'];
 		  margin-right: 40%;
 		  margin-left: 10%;
 		}
+		.tuples{
+			/*margin-top: 10%;*/
+			margin-right: 50%;
+			display: block;
+		}
+
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 80%;
+		  margin: auto;
+		}
+
+		td {
+		  border: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+		tr:nth-child(odd) {
+		  background-color: white;
+		}			
+		table#t01, th {
+		  background-color: black;
+		  color: white;
+		  order: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		.login-form {
+			width: 100%;
+    		/*margin: 10% auto;*/
+    		margin-left: 35%;
+		}
+
+	    .login-form h2 {
+	        margin: 0 0 15px;
+	    }
+	    .form-control, .btn {
+	        min-height: 38px;
+	        border-radius: 2px;
+	    }
+	    .btn {        
+	        font-size: 15px;
+	        background-color: red;
+	        font-weight: bold;
+	    }
+	    .bl{
+	    	display: inline-block;
+	    }
 
 	 </style>
 </head>
@@ -220,10 +283,110 @@ $myname = $row['NAME'] ." " . $row['SURNAME'];
         <li><a href="http://localhost:4000/index.php">Log out</a></li>
       </ul>
     </div>
+    </div>
 
+
+
+ <div class="login-form">
+    <form action = "" method = "post">
+        <h2 class="text-center"> </h2>       
+        <div class="form-group bl">
+            <input name="Name" type="text" class="form-control" placeholder="Name" >
+        </div>
+         <div class="form-group bl">
+            <input  type="text" class="form-control" name = "Surname" placeholder="Surname" >
+        </div>
+		<div class="form-group bl">
+            <input  type="text" class="form-control" name = "Fathername" placeholder="Fathername" >
+        </div>
+        
+        <div class="form-group bl">
+            <button id="reg_button" type="submit" class="btn btn-primary btn-block" onclick="removeFunction()">Search </button>
+        </div>
+
+    </form>
+</div>
 
     
 
 </body>
 
 </html>
+<script type="text/javascript">
+	function removeFunction(){
+		document.getElementById("table").remove();
+		document.getElementById("table").remove();
+	}
+</script>
+<?php 
+
+
+$fathername = mysqli_real_escape_string($conn,$_POST['Fathername']);
+$name = mysqli_real_escape_string($conn,$_POST['Name']);
+$surname = mysqli_real_escape_string($conn,$_POST['Surname']);
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+	if($name == "" and $surname == "" and $fathername =="" ){
+		$sql = "SELECT * FROM Students  " ;
+	}elseif($surname == "" and $fathername =="" ){
+		$sql = "SELECT * FROM Students WHERE NAME = '$name' " ;
+	}elseif($name == "" and $fathername =="" ){
+		$sql = "SELECT * FROM Students WHERE SURNAME = '$surname' " ;
+	}elseif($surname == "" and $name =="" ){
+		$sql = "SELECT * FROM Students WHERE FATHERNAME = '$fathername' " ;
+	}elseif($surname == "" ){
+		$sql = "SELECT * FROM Students WHERE NAME = '$name' and FATHERNAME = '$fathername' " ;
+	}elseif($name == "" ){
+		$sql = "SELECT * FROM Students WHERE SURNAME = '$surname' and FATHERNAME = '$fathername' " ;
+	}elseif($fathername == "" ){
+		$sql = "SELECT * FROM Students WHERE NAME = '$name' and SURNAME = '$surname' " ;
+	}else{
+		$sql = "SELECT * FROM Students WHERE NAME = '$name' and SURNAME = '$surname' and FATHERNAME = '$fathername' " ;
+	}
+  
+     
+	 $result = mysqli_query($conn,$sql);
+
+      $id = mysqli_real_escape_string($conn,$_POST['id']);
+      $sql = "DELETE FROM `Students` 
+      WHERE `ID` = '$id'";
+
+      if ($conn->query($sql) === TRUE) {
+
+      } else {
+          echo "Error: " . $sql . "<br>" . $conn->error;
+      }
+
+
+		echo "<div id=\"tab\"></div>
+			<table id=\"table\">
+			  <tr>
+		    <th>ID</th>
+		    <th>Name</th>
+		    <th>Surname</th>
+		    <th>Fathername</th>
+		    <th>Grade</th>
+		    <th>Mobile Number</th>
+		    <th>Birthday</th>
+
+		  	</tr>";
+		if($result->num_rows>0){
+			while($row = $result->fetch_assoc()) {
+		       	echo "  <tr>
+						    <td>". $row["ID"] ."</td>
+						    <td>".$row["NAME"]."</td>
+						    <td>". $row["SURNAME"] ."</td>
+						    <td>".$row["FATHERNAME"]."</td>
+						    <td>". $row["GRADE"] ."</td>
+						    <td>".$row["MOBILENUMBER"]."</td>
+						    <td>".$row["BIRTHDAY"]."</td>
+						  </tr>";
+		    }
+		}
+		echo "</table>";
+
+}
+ ?>
+
+

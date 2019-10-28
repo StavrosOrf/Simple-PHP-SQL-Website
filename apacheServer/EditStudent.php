@@ -377,9 +377,8 @@ var surname = event.parentElement.parentElement.children[2].innerHTML;
 var fathername = event.parentElement.parentElement.children[3].innerHTML;
 var grade = event.parentElement.parentElement.children[4].innerHTML;
 var mobilenumber = event.parentElement.parentElement.children[5].innerHTML;
-console.log(event.parentElement.parentElement);
-console.log(mobilenumber);
 var birthday = event.parentElement.parentElement.children[6].innerHTML;
+
   document.getElementById("tab").innerHTML =
   " <div class=\"login-form\">     <form action = \"\" method = \"post\">        <h2 class=\"text-center\">Edit Student</h2><div class=\"form-group\">            <input name=\"id\" type=\"hidden\" class=\"form-control\" value=\"" +id+ "\" required=\"required\">        </div>               <div class=\"form-group\">            <input name=\"Name\" type=\"text\" class=\"form-control\" value=\"" +name+ "\" required=\"required\">        </div>         <div class=\"form-group\">            <input  type=\"text\" class=\"form-control\" name = \"Surname\" value=\"" +surname+ "\" required=\"required\">        </div>		<div class=\"form-group\">            <input  type=\"text\" class=\"form-control\" name = \"Fathername\" value=\"" +fathername+ "\" required=\"required\">        </div>        <div class=\"form-group\">            <input name=\"Grade\" type=\"number\" class=\"form-control\" value=\"" +grade+ "\" required=\"required\">        </div>  <div class=\"form-group\">            <input  type=\"number\" class=\"form-control\" name = \"MobileNumber\" value=\"" +mobilenumber+ "\" required=\"required\">        </div>        <div class=\"form-group\">            <input value=\"" +birthday+ "\" name=\"Date\" class=\"textbox-n form-control\" type=\"text\" onfocus=\"(this.type='date')\" onblur=\"(this.type='text')\" id=\"date\" required=\"required\">       <div class=\"form-group\">            <button id=\"reg_button\" type=\"submit\" class=\"btn btn-primary btn-block\">Edit </button>        </div>        <div style = \"font-size:20px; color:green; margin-top:10px;text-align: center;\"></div>    </form></div>";
  // document.getElementById("table").remove();

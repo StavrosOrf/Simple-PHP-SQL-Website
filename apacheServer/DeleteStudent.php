@@ -59,7 +59,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Edit Student Page</title>
+<title>Delete Student Page</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	 <style type = "text/css">
 	 	body {
@@ -273,6 +273,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 	    }
 	    .btn {        
 	        font-size: 15px;
+	        background-color: red;
 	        font-weight: bold;
 	    }
 
