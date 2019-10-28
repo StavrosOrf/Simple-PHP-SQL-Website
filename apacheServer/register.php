@@ -41,13 +41,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       $name = mysqli_real_escape_string($conn,$_POST['name']);
       $surname = mysqli_real_escape_string($conn,$_POST['surname']);
 
-      $sql = "INSERT INTO Teachers (NAME, SURNAME, USERNAME,PASSWORD,EMAIL)
-      VALUES ($name,$surname,$myusername,$password,$email)";
+      $sql = "INSERT INTO `Teachers` (`NAME`, `SURNAME`, `USERNAME`,`PASSWORD`,`EMAIL`)
+      VALUES ('$name','$surname','$myusername','$password','$email')";
 
       if ($conn->query($sql) === TRUE) {
          // echo "New record created successfully";
       } else {
-         // echo "Error: " . $sql . "<br>" . $conn->error;
+          echo "Error: " . $sql . "<br>" . $conn->error;
       }
 
       header("location: index.php");
@@ -87,9 +87,35 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         font-size: 15px;
         font-weight: bold;
     }
+    body {
+      background-image: url("https://wallup.net/wp-content/uploads/2016/07/20/34502-simple_background.jpg");
+      background-repeat: no-repeat;
+      background-size: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .logo {
+      float: left;
+      z-index: 20;
+      /*border-radius: 1px;*/
+
+    }
+    /* ~~ Top Navigation Bar ~~ */
+
+    #navigation-container {
+      width: 100%;
+      margin: 0 auto;
+      height: 10%;
+    } 
 </style>
 </head>
 <body>
+<div id="navigation-container">
+
+  <a href="#"><img  class="logo" src="https://i.imgur.com/Y4PR8PM.png"></a>
+
+</div>
 <div class="login-form">
     <form action = "" method = "post">
         <h2 class="text-center">Register</h2>       
@@ -103,10 +129,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <input name="password" type="password" class="form-control" placeholder="Password" required="required">
         </div>
         <div class="form-group">
-            <input name="name" type="password" class="form-control" placeholder="Name" required="required">
+            <input name="name" type="text" class="form-control" placeholder="Name" required="required">
         </div>
         <div class="form-group">
-            <input name="surname" type="password" class="form-control" placeholder="Surname" required="required">
+            <input name="surname" type="text" class="form-control" placeholder="Surname" required="required">
         </div>
         <div class="form-group">
             <button id="reg_button" type="submit" class="btn btn-primary btn-block">Register</button>

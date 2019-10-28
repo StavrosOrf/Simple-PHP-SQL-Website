@@ -23,10 +23,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   	//header("location: index.php");
   	  $error = "Your Login Name or Password is invalid";
   }else{
-	  $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-	  $active = $row['active'];
+	  // $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+	  // $active = $row['active'];
 
-	  $count = mysqli_num_rows($result);
+	  // $count = mysqli_num_rows($result);
 
 	    //session_register("myusername");
 	     $_SESSION['login_username'] = $myusername;
@@ -68,12 +68,39 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 		        font-size: 15px;
 		        font-weight: bold;
 		    }
+
+	 	body {
+	 	  background-image: url("https://wallup.net/wp-content/uploads/2016/07/20/34502-simple_background.jpg");
+	 	  background-repeat: no-repeat;
+	 	  background-size: 100%;
+		  margin: 0;
+		  padding: 0;
+		}
+
+		.logo {
+		  float: left;
+		  z-index: 20;
+		  /*border-radius: 1px;*/
+
+		}
+		/* ~~ Top Navigation Bar ~~ */
+
+		#navigation-container {
+		  width: 100%;
+		  margin: 0 auto;
+		  height: 10%;
+		}		    
       </style>
       
    </head>
 
    <body bgcolor = "#FFFFFF">
-      </div>
+      <div id="navigation-container">
+
+		    <a href="#"><img  class="logo" src="https://i.imgur.com/Y4PR8PM.png"></a>
+
+	</div>
+    </div>
       <div class="login-form">
     <form action = "" method = "post">
         <h2 class="text-center">Log in</h2>       
@@ -90,9 +117,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
             <!-- <a href="#" class="pull-right">Forgot Password?</a> -->
         </div>
-        <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>        
+        <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div> 
+        <p class="text-center"><a href="http://localhost:4000/register.php">Create an Account</a></p>       
     </form>
-    <p class="text-center"><a href="http://localhost:4000/register.php">Create an Account</a></p>
+    
 </div>
 
    </body>
